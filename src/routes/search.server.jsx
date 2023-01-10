@@ -1,4 +1,11 @@
-import {gql, useLocalization, useShopQuery, useUrl} from '@shopify/hydrogen';
+import {
+  gql,
+  useLocalization,
+  useShopQuery,
+  useUrl,
+  ShopifyAnalyticsConstants,
+  useServerAnalytics,
+} from '@shopify/hydrogen';
 
 import {PRODUCT_CARD_FRAGMENT} from '~/lib/fragments';
 import {ProductGrid, Section, Text} from '~/components';
@@ -27,6 +34,14 @@ export default function Search({pageBy = PAGINATION_SIZE, params}) {
       searchTerm,
     },
     preload: true,
+  });
+
+  useServerAnalytics({
+    shopify: {
+      canonicalPath: '/search',
+      pageType: ShopifyAnalyticsConstants.pageType.search,
+      searchTerm,
+    },
   });
 
   const products = data?.products;
